@@ -10,7 +10,7 @@ const con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "boomershub"
+    database: "test"
   });
 
 
@@ -39,7 +39,7 @@ apiController(app, con)
         throw err;
     } else{
         console.log("Connected!");
-        app.listen(4300, (err, res)=>{
+        app.listen(4000, (err, res)=>{
             console.log('server started on 4300');
         })
     }
