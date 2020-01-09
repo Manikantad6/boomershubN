@@ -37,8 +37,9 @@ app.get('/fetch/:id', (req,res)=>{
 
 app.get('/search/:text', (req,res)=>{
     try{
+        // city = req.params.type
         text = req.params.text
-        var query = "SELECT * FROM properties WHERE city REGEXP '"+text+"'";
+        var query = "SELECT * FROM properties WHERE city REGEXP '^"+text+"'  OR name REGEXP '^"+text+"' OR state REGEXP '^"+text+"'" ;
         con.query(query, (err, result)=>{
             if(!err){
                 console.log(result)

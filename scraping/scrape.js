@@ -14,6 +14,40 @@ module.exports = (app, puppeteer, con) =>{
                         ]
                 }
 
+    const imageURLs ={
+        'Plano' : [
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-1-entrance_sd.jpg",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-4-bedroom_sd.jpg",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-5-living-room_sd.jpg"
+                                ],
+        'BOCA_RATON' : [
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_01_Seniorly_sd.png",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_03_Seniorly_sd.png",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_05_Seniorly_sd.png"
+                                ],
+        'Southlake' : [
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Isle+At+Watermere/DiscoveryVillageatSouthLake_Photos_03_Seniorly_sd.jpg",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Isle+At+Watermere/DiscoveryVillageatSouthLake_Photos_09_Seniorly_sd.png",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Isle+At+Watermere/DiscoveryVillageatSouthLake_Photos_10_Seniorly_sd.png"
+                                ],
+        'TAMPA' : [
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Legacy+At+Highwoods+Preserve/Highwoods%2520Preserve_Photos_05_Seniorly_sd.png",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Legacy+At+Highwoods+Preserve/LegacyAtHighwoodsPreserve_photos_02_Seniorly_sd.jpg",
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Legacy+At+Highwoods+Preserve/connected-box-3_sd.jpg"
+                                ],
+        'HOLLYWOOD' : [
+                                    "https://bucketmani.s3.ap-south-1.amazonaws.com/Emerald+Park+of+Hollywood/EmeraldParkRetirement_Photos_01_Seniorly_sd.jpg",
+                                    "https://bucketmani.s3.ap-south-1.amazonaws.com/Emerald+Park+of+Hollywood/EmeraldParkRetirement_Photos_02_Seniorly_sd.jpg",
+                                    "https://bucketmani.s3.ap-south-1.amazonaws.com/Emerald+Park+of+Hollywood/EmeraldParkRetirement_Photos_03_Seniorly_sd.jpg"
+                                ],
+        'LANTANA' : [
+                            "https://bucketmani.s3.ap-south-1.amazonaws.com/Banyan+Place/IMG_1086_sd.jpg",
+                            "https://bucketmani.s3.ap-south-1.amazonaws.com/Banyan+Place/IMG_1134_sd.jpg",
+                            "https://bucketmani.s3.ap-south-1.amazonaws.com/Banyan+Place/banyanplace_photos_06_seniorly_sd.png"
+
+                            ],
+    }
+
 app.get('/scrapeDataSites',  (req,res)=>{
    
     list.Texas.forEach(async(p)=>{
@@ -62,7 +96,12 @@ async function scrapeFlorida(provider){
                     }
                     floridaObj = toObject(keys, values)
                     console.log(floridaObj)
-                    var q = "insert INTO properties(name, address, city, state, zip_code, phone, type, capacity) VALUES('"+floridaObj.Name+"','"+floridaObj.Street_Address+"','"+floridaObj.City+"','"+floridaObj.State+"','"+floridaObj.Zip+"','"+floridaObj.Phone_Number+"','"+floridaObj.Type+"','"+floridaObj.Licensed_Beds+"')"
+                    city = floridaObj.City;
+                    console.log(city)
+                   // console.log(imageURLs)
+                    let images = imageURLs[city]
+                    console.log(images)
+                    var q = "insert INTO properties(name, address, city, state, zip_code, phone, type, capacity, images) VALUES('"+floridaObj.Name+"','"+floridaObj.Street_Address+"','"+floridaObj.City+"','"+floridaObj.State+"','"+floridaObj.Zip+"','"+floridaObj.Phone_Number+"','"+floridaObj.Type+"','"+floridaObj.Licensed_Beds+"','"+JSON.stringify(images)+"')"
                     con.query(q, (err, result)=>{
                         if(err){
                             console.log(err)
@@ -84,7 +123,7 @@ async function scrapeFlorida(provider){
 
 async function scrapeTexas(provider){
     const browser = await puppeteer.launch({
-        headless:false
+        headless:true
     });
     try{
             const page = await browser.newPage();
@@ -112,7 +151,10 @@ async function scrapeTexas(provider){
             let combinedObj =  toObject(keys, values)
             combinedObj['bedCount'] = bedcount;
             console.log(combinedObj)
-            var q = "insert INTO properties(name, address, city, state, zip_code, country, phone, type, capacity) VALUES('"+combinedObj.Provider+"','"+combinedObj.Address+"','"+combinedObj.City+"','"+'Texas'+"','"+combinedObj.ZIP_Code+"','"+combinedObj.Phone+"','"+combinedObj.Type+"','"+combinedObj.County+"','"+combinedObj.bedCount+"')"
+            city = combinedObj.City;
+            let images = imageURLs[city]
+
+            var q = "insert INTO properties(name, address, city, state, zip_code, country, phone, type, capacity, images) VALUES('"+combinedObj.Provider+"','"+combinedObj.Address+"','"+combinedObj.City+"','"+'Texas'+"','"+combinedObj.ZIP_Code+"','"+combinedObj.County+"','"+combinedObj.Phone+"','"+combinedObj.Type+"','"+combinedObj.bedCount+"','"+images+"')"
             con.query(q, (err, result)=>{
                 if(err){
                     console.log(err)
