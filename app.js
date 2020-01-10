@@ -16,9 +16,6 @@ const con = mysql.createConnection({
   });
 
 
-
-
-// var connection
 const scrapingController = require('./scraping/scrape')
 
 const apiController = require('./apis/apiController')
@@ -27,15 +24,7 @@ scrapingController(app, puppeteer, con)
 apiController(app, con)
 
 
-
-
-
-
-
-
-
-
-
+//connection and starting server
   con.connect(function(err) {
     if (err){
         throw err;

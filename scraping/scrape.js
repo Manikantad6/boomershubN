@@ -18,12 +18,12 @@ module.exports = (app, puppeteer, con) =>{
         'Plano' : [
                                 "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-1-entrance_sd.jpg",
                                 "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-4-bedroom_sd.jpg",
-                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-5-living-room_sd.jpg"
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/Brookdale+Creekside/brookdale-creekside-5-living-room_sd.jpg",
                                 ],
         'BOCA_RATON' : [
                                 "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_01_Seniorly_sd.png",
                                 "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_03_Seniorly_sd.png",
-                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_05_Seniorly_sd.png"
+                                "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Delaney+At+Georgetown+Village/TheDelaneyAtGeorgetownVillage_photos_05_Seniorly_sd.png",
                                 ],
         'Southlake' : [
                                 "https://bucketmani.s3.ap-south-1.amazonaws.com/The+Isle+At+Watermere/DiscoveryVillageatSouthLake_Photos_03_Seniorly_sd.jpg",
@@ -57,7 +57,7 @@ app.get('/scrapeDataSites',  (req,res)=>{
        await scrapeFlorida(p);
     })
 
-    res.send('jhkg')
+    res.status(200).json({'msg': 'data scraped successfully'});
 })
 
 async function scrapeFlorida(provider){
@@ -154,7 +154,7 @@ async function scrapeTexas(provider){
             city = combinedObj.City;
             let images = imageURLs[city]
 
-            var q = "insert INTO properties(name, address, city, state, zip_code, country, phone, type, capacity, images) VALUES('"+combinedObj.Provider+"','"+combinedObj.Address+"','"+combinedObj.City+"','"+'Texas'+"','"+combinedObj.ZIP_Code+"','"+combinedObj.County+"','"+combinedObj.Phone+"','"+combinedObj.Type+"','"+combinedObj.bedCount+"','"+images+"')"
+            var q = "insert INTO properties(name, address, city, state, zip_code, country, phone, type, capacity, images) VALUES('"+combinedObj.Provider+"','"+combinedObj.Address+"','"+combinedObj.City+"','"+'Texas'+"','"+combinedObj.ZIP_Code+"','"+combinedObj.County+"','"+combinedObj.Phone+"','"+combinedObj.Type+"','"+combinedObj.bedCount+"','"+JSON.stringify(images)+"')"
             con.query(q, (err, result)=>{
                 if(err){
                     console.log(err)
@@ -182,20 +182,7 @@ function toObject(names, values) {
 }
 
 
-function insertToDB(arr){
-    // arr.forEach(element => {
-        
-    // });
 
-}
-// (async () => {
-//     const browser = await puppeteer.launch();
-//     const page = await browser.newPage();
-//     await page.goto('https://news.ycombinator.com', {waitUntil: 'networkidle2'});
-//     await page.pdf({path: 'hn.pdf', format: 'A4'});
-  
-//     await browser.close();
-//   })();
 
 
 }

@@ -15,7 +15,7 @@ var filePath = "./images/Astrology-day-feature.jpg";
 var params = {
   Bucket: 'bucketmani',
   Body : fs.createReadStream(filePath),
-  Key : ""+Date.now()+"_"+path.basename(filePath)
+  Key : Date.now()+"_"+path.basename(filePath)
 };
 
 s3.upload(params, function (err, data) {
